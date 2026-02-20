@@ -3,33 +3,37 @@ import { motion, AnimatePresence } from "framer-motion";
 import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
 import LanguageSelector from "@/components/LanguageSelector";
 import VehicleSelector from "@/components/VehicleSelector";
+import ModelSelector from "@/components/ModelSelector";
 import VisualSymptomSelector from "@/components/VisualSymptomSelector";
 import DiagnosisResult from "@/components/DiagnosisResult";
 import RoboChatbot from "@/components/RoboChatbot";
-import { VehicleType, SymptomId } from "@/data/mockData";
+import { VehicleType, SymptomId, VehicleModel } from "@/data/mockData";
 import { ArrowLeft } from "lucide-react";
 
-type AppStep = "language" | "vehicle" | "symptom" | "diagnosis";
+type AppStep = "language" | "vehicle" | "model" | "symptom" | "diagnosis";
 
 const AppContent = () => {
   const [step, setStep] = useState<AppStep>("language");
   const [vehicleType, setVehicleType] = useState<VehicleType | null>(null);
+  const [vehicleModel, setVehicleModel] = useState<VehicleModel | null>(null);
   const [symptom, setSymptom] = useState<SymptomId | null>(null);
   const { t } = useLanguage();
 
   const goBack = () => {
     if (step === "diagnosis") setStep("symptom");
-    else if (step === "symptom") setStep("vehicle");
+    else if (step === "symptom") setStep("model");
+    else if (step === "model") setStep("vehicle");
     else if (step === "vehicle") setStep("language");
   };
 
   const handleChatDiagnose = useCallback(
     (s: SymptomId) => {
       if (!vehicleType) setVehicleType("bike");
+      if (!vehicleModel) setVehicleModel({ id: "generic", name: "Generic", icon: "🏍️" });
       setSymptom(s);
       setStep("diagnosis");
     },
-    [vehicleType]
+    [vehicleType, vehicleModel]
   );
 
   return (
@@ -65,6 +69,17 @@ const AppContent = () => {
               <VehicleSelector
                 onSelect={(type) => {
                   setVehicleType(type);
+                  setStep("model");
+                }}
+              />
+            </motion.div>
+          )}
+          {step === "model" && vehicleType && (
+            <motion.div key="model" exit={{ opacity: 0, x: -50 }}>
+              <ModelSelector
+                vehicleType={vehicleType}
+                onSelect={(model) => {
+                  setVehicleModel(model);
                   setStep("symptom");
                 }}
               />
@@ -82,7 +97,11 @@ const AppContent = () => {
           )}
           {step === "diagnosis" && vehicleType && symptom && (
             <motion.div key="diagnosis" exit={{ opacity: 0, x: -50 }} className="w-full">
-              <DiagnosisResult vehicleType={vehicleType} symptom={symptom} />
+              <DiagnosisResult
+                vehicleType={vehicleType}
+                symptom={symptom}
+                vehicleModelName={vehicleModel?.name}
+              />
             </motion.div>
           )}
         </AnimatePresence>
