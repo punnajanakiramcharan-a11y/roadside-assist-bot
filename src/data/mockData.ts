@@ -1,6 +1,38 @@
 export type VehicleType = "bike" | "car";
 export type SymptomId = "engineStopped" | "notStarting" | "smokecoming" | "strangeNoise" | "lowPower";
 
+export interface VehicleModel {
+  id: string;
+  name: string;
+  icon: string;
+}
+
+export const bikeModels: VehicleModel[] = [
+  { id: "hero_splendor", name: "Hero Splendor Plus", icon: "🏍️" },
+  { id: "honda_activa", name: "Honda Activa", icon: "🛵" },
+  { id: "bajaj_pulsar", name: "Bajaj Pulsar 150", icon: "🏍️" },
+  { id: "tvs_apache", name: "TVS Apache RTR 160", icon: "🏍️" },
+  { id: "royal_enfield", name: "Royal Enfield Classic 350", icon: "🏍️" },
+  { id: "yamaha_r15", name: "Yamaha R15", icon: "🏍️" },
+  { id: "ktm_duke", name: "KTM Duke 200", icon: "🏍️" },
+  { id: "suzuki_access", name: "Suzuki Access 125", icon: "🛵" },
+  { id: "tvs_jupiter", name: "TVS Jupiter", icon: "🛵" },
+  { id: "honda_shine", name: "Honda Shine", icon: "🏍️" },
+];
+
+export const carModels: VehicleModel[] = [
+  { id: "maruti_swift", name: "Maruti Suzuki Swift", icon: "🚗" },
+  { id: "maruti_baleno", name: "Maruti Suzuki Baleno", icon: "🚗" },
+  { id: "hyundai_creta", name: "Hyundai Creta", icon: "🚙" },
+  { id: "hyundai_i20", name: "Hyundai i20", icon: "🚗" },
+  { id: "tata_nexon", name: "Tata Nexon", icon: "🚙" },
+  { id: "tata_punch", name: "Tata Punch", icon: "🚙" },
+  { id: "mahindra_thar", name: "Mahindra Thar", icon: "🚙" },
+  { id: "toyota_innova", name: "Toyota Innova Crysta", icon: "🚐" },
+  { id: "honda_city", name: "Honda City", icon: "🚗" },
+  { id: "kia_seltos", name: "Kia Seltos", icon: "🚙" },
+];
+
 export interface DiagnosisData {
   isEngineRelated: boolean;
   possibleReasons: { en: string; te: string; hi: string; ta: string; icon: string }[];
@@ -208,10 +240,20 @@ export const diagnosisDatabase: Record<VehicleType, Record<SymptomId, DiagnosisD
   },
 };
 
-export const mockMechanics = [
-  { name: "Sri Balaji Auto Works", distance: "0.8 km", rating: 4.5, phone: "+91 9876543210" },
-  { name: "Krishna Motors", distance: "1.2 km", rating: 4.2, phone: "+91 9876543211" },
-  { name: "Royal Enfield Service Center", distance: "2.1 km", rating: 4.7, phone: "+91 9876543212" },
-  { name: "Quick Fix Garage", distance: "2.5 km", rating: 4.0, phone: "+91 9876543213" },
-  { name: "A1 Auto Repair", distance: "3.0 km", rating: 4.3, phone: "+91 9876543214" },
+export interface MockMechanic {
+  name: string;
+  distance: string;
+  distanceKm: number;
+  rating: number;
+  phone: string;
+  specialties: string[];
+  available: boolean;
+}
+
+export const mockMechanics: MockMechanic[] = [
+  { name: "Sri Balaji Auto Works", distance: "0.8 km", distanceKm: 0.8, rating: 4.5, phone: "+91 9876543210", specialties: ["Spark Plug", "Battery", "Chain", "Air Filter"], available: true },
+  { name: "Krishna Motors", distance: "1.2 km", distanceKm: 1.2, rating: 4.2, phone: "+91 9876543211", specialties: ["Piston Rings", "Brake Pads", "Timing Belt"], available: true },
+  { name: "Royal Enfield Service Center", distance: "2.1 km", distanceKm: 2.1, rating: 4.7, phone: "+91 9876543212", specialties: ["All Parts", "Engine Repair", "Full Service"], available: false },
+  { name: "Quick Fix Garage", distance: "2.5 km", distanceKm: 2.5, rating: 4.0, phone: "+91 9876543213", specialties: ["Battery", "Brake Pads", "Air Filter", "Chain"], available: true },
+  { name: "A1 Auto Repair", distance: "3.0 km", distanceKm: 3.0, rating: 4.3, phone: "+91 9876543214", specialties: ["Head Gasket", "Fuel Pump", "Starter Motor"], available: true },
 ];

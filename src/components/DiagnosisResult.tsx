@@ -12,9 +12,10 @@ import { Language } from "@/data/translations";
 interface Props {
   vehicleType: VehicleType;
   symptom: SymptomId;
+  vehicleModelName?: string;
 }
 
-const DiagnosisResult = ({ vehicleType, symptom }: Props) => {
+const DiagnosisResult = ({ vehicleType, symptom, vehicleModelName }: Props) => {
   const { t, lang } = useLanguage();
   const data: DiagnosisData = diagnosisDatabase[vehicleType][symptom];
   const [showRepair, setShowRepair] = useState(false);
@@ -30,6 +31,15 @@ const DiagnosisResult = ({ vehicleType, symptom }: Props) => {
       className="flex flex-col gap-6 w-full max-w-lg mx-auto px-4"
     >
       <h2 className="text-2xl font-bold text-foreground text-center">{t("diagnosisTitle")}</h2>
+
+      {/* Vehicle Model Badge */}
+      {vehicleModelName && (
+        <div className="flex justify-center">
+          <span className="px-4 py-1.5 bg-accent/15 text-accent rounded-full text-sm font-semibold">
+            🚗 {vehicleModelName}
+          </span>
+        </div>
+      )}
 
       {/* Engine Warning */}
       {data.isEngineRelated && (
@@ -129,7 +139,12 @@ const DiagnosisResult = ({ vehicleType, symptom }: Props) => {
           partName={getLocalized(data.partName)}
         />
       )}
-      {showMechanics && <NearbyMechanics />}
+      {showMechanics && (
+        <NearbyMechanics
+          damagedPartName={getLocalized(data.damagedPart)}
+          vehicleModelName={vehicleModelName}
+        />
+      )}
     </motion.div>
   );
 };
